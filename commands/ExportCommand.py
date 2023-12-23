@@ -136,7 +136,6 @@ def recursiveEnumerateComponents(
 
 def export(main_cfg: ExportConfig, output_dir: Path, root: Occurrence | Component):
     ao = apper.AppObjects()
-    root_component = root.component if isinstance(root, Occurrence) else root
 
     # Iterate over all components from the root and assemble a list of components to export.
     all_components = recursiveEnumerateComponents(root)
@@ -191,7 +190,7 @@ def export(main_cfg: ExportConfig, output_dir: Path, root: Occurrence | Componen
             # Check if the file has changed since the last export.
             if (
                 old_version["component"] == cmp.name
-                and old_version["revision"] == cmp.revisionId
+                and old_version["revisionId"] == cmp.revisionId
                 and filepath.exists()
                 and (main_cfg.modified and old_version["changed"] < main_cfg.modified)
             ):
@@ -201,7 +200,7 @@ def export(main_cfg: ExportConfig, output_dir: Path, root: Occurrence | Componen
                 # the revision Id will change even if the component has not changed. This should be fixed
                 # by copying and then rotating the component. Until then, this will only work for unrotated
                 # components.
-                ao.print_msg(f"Skipping unchanged file {filename}")
+                # ao.print_msg(f"Skipping unchanged file {filename}")
                 continue
 
             # If the file name has changed, delete the old file:
@@ -213,7 +212,8 @@ def export(main_cfg: ExportConfig, output_dir: Path, root: Occurrence | Componen
         version_control[file_key] = {
             "component": cmp.name,
             "filename": str(filename),
-            "revision": cmp.revisionId,
+            "revisionId": cmp.revisionId,
+            "fromDocument": ao.root_comp.name,
             "changed": datetime.now().isoformat(),
         }
 
