@@ -204,14 +204,14 @@ def export(main_cfg: ExportConfig, output_dir: Path, root: Occurrence | Componen
                 continue
 
             # If the file name has changed, delete the old file:
-            if old_version["filename"] != str(filename):
+            if old_version["filename"] != str(filepath):
                 old_filename = output_dir / old_version["filename"]
                 if old_filename.exists():
                     old_filename.unlink()
 
         version_control[file_key] = {
             "component": cmp.name,
-            "filename": str(filename),
+            "filename": str(filepath),
             "revisionId": cmp.revisionId,
             "fromDocument": ao.root_comp.name,
             "changed": datetime.now().isoformat(),
