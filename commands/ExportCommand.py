@@ -48,7 +48,7 @@ class ComponentExportConfig:
             "name": self.name,
             "to": self.to,
         }
-        if self.orientation is not None:
+        if self.up is not None:
             rv["up"] = self.up
         if self.fmt is not None:
             rv["fmt"] = self.fmt
@@ -179,7 +179,7 @@ def export(main_cfg: ExportConfig, output_dir: Path, root: Occurrence | Componen
         file_key = file_to
 
         # TODO: Allow this to be overridden in the config file.
-        if cfg.count is not None:
+        if cfg.count is not None and cfg.count >= 2:
             # Add the count to the filename:
             file_to += f"_x{cfg.count}"
         filename = f"{file_to}.{file_ext}"
